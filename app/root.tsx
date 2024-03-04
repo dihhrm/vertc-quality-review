@@ -1,4 +1,3 @@
-import { cssBundleHref } from "@remix-run/css-bundle";
 import type { LinksFunction } from "@remix-run/node";
 import {
   Links,
@@ -9,8 +8,14 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 
+import styles from "./tailwind.css";
+import Sidebar from "./components/Sidebar";
+import Header from "./components/Header";
+import designSystem from "@vert-capital/design-system-ui/dist/style.css";
+
 export const links: LinksFunction = () => [
-  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
+  { rel: "stylesheet", href: designSystem },
+  { rel: "stylesheet", href: styles },
 ];
 
 export default function App() {
@@ -19,11 +24,25 @@ export default function App() {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+          rel="stylesheet"
+        ></link>
         <Meta />
         <Links />
       </head>
       <body>
-        <Outlet />
+        <Header />
+        <div className="flex">
+          <Sidebar />
+          <Outlet />
+        </div>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
