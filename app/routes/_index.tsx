@@ -20,10 +20,12 @@ export default function Index() {
   return (
     <>
       <div className="flex w-full justify-left">
-        <h1 className="font-bold text-[1.5rem] my-6 text-start mx-10">Projetos</h1>
+        <h1 className="font-bold text-[1.5rem] mt-10 text-start mx-10">
+          Projetos
+        </h1>
       </div>
       <div className="flex w-full justify-left">
-        <div className="grid w-full p-10 grid-cols-3 gap-10 ">
+        <div className="grid w-full p-10 grid-cols-3 gap-10 mb-10">
           {projects.map((project: Project) => (
             <Link to={`/projects/${project.id}`}>
               <Card
