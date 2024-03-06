@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useSubmit } from "@remix-run/react";
+import { Link } from "@remix-run/react";
 import {
   Button,
   DropdownMenu,
@@ -9,25 +9,27 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   Icons,
-  SliderStep,
-  cn,
+  Navbar,
 } from "@vert-capital/design-system-ui";
 import { routes } from "~/common/constants";
 
 export default function Header() {
   const [user, setUser] = useState({ name: "Diego", email: "" });
-  const [fontSize, setFontSize] = useState(16);
 
   const signOut = () => {};
 
   return (
-    <header className="flex justify-between border-b-light shadow-sm p-3">
-      <img
-        src="/resources/images/logo.svg"
-        alt="User Icon"
-        height={60}
-        width={60}
-      />
+    <Navbar>
+      <div className="flex items-center">
+        <img
+          src="/resources/images/logo.svg"
+          alt="User Icon"
+          height={60}
+          width={60}
+          className="mr-2"
+        />
+        <h4 className="font-bold">Quality Review</h4>
+      </div>
       {user.id ? (
         <Link to={routes.login} prefetch="intent" className="">
           <Button variant={"outline"}>Entrar</Button>
@@ -57,23 +59,6 @@ export default function Header() {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuLabel>
-              <div className="flex p-1 font-normal justify-between items-center">
-                <div>Interface</div>
-                <SliderStep
-                  defaultValue={[fontSize]}
-                  className={cn("w-[60%]")}
-                  min={12}
-                  max={20}
-                  step={4}
-                />
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <div className="flex p-1">Alterar senha</div>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
             <DropdownMenuItem onClick={signOut}>
               <div className="flex justify-start space-x-2 items-center p-1">
                 <div>Sair</div>
@@ -83,6 +68,6 @@ export default function Header() {
           </DropdownMenuContent>
         </DropdownMenu>
       )}
-    </header>
+    </Navbar>
   );
 }

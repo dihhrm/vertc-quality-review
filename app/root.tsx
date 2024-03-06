@@ -12,6 +12,7 @@ import styles from "./tailwind.css";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 import designSystem from "@vert-capital/design-system-ui/dist/style.css";
+import { Footer } from "@vert-capital/design-system-ui";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: designSystem },
@@ -39,10 +40,11 @@ export default function App() {
       </head>
       <body>
         <Header />
-        <div className="flex">
+        <div className="flex-row bg-extraLight">
           <Sidebar />
           <Outlet />
         </div>
+        <Footer />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
