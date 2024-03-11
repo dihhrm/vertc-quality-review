@@ -8,22 +8,28 @@ import {
   TableBody,
   TableHead,
   Badge,
+  Button,
 } from "@vert-capital/design-system-ui";
 import { routes } from "~/common/constants";
-Table;
+
+import ToggleView from "~/components/ToggleView";
+import { ExternalLinkIcon } from "@radix-ui/react-icons";
+import { Issue } from "types";
+
 export const loader = async ({ params }: LoaderFunctionArgs) => {
-  const project = await fetch("http://localhost:8080/projects/" + params.id);
-  if (!project) {
-    throw new Error("Project not found", { status: 404 });
+  const issues = await fetch("http://localhost:8080/issues/");
+  if (!issues) {
+    throw new Error("Issues not found", { status: 404 });
   }
-  return json({ project });
+  return json(await issues.json());
 };
 
 export default function Project() {
-  const project = useLoaderData();
+  const issues = useLoaderData<Issue[]>();
+
   return (
     <div id="project">
-      <div className="flex  justify-left items-center mt-10 mx-10">
+      <div className="flex justify-left items-center mt-10 mx-10">
         <Link to={routes.root}>
           <img
             className="hover:text-primary transition-all ease-in-out"
@@ -33,6 +39,9 @@ export default function Project() {
         <h1 className="font-bold text-[1.5rem] text-start ml-2">Hiperion</h1>
       </div>
       <div className="bg-white mt-4 p-10">
+        <div className="flex justify-end my-4">
+          <ToggleView />
+        </div>
         <Table className="">
           <TableHeader>
             <TableRow>
@@ -46,38 +55,42 @@ export default function Project() {
           </TableHeader>
 
           <TableBody>
-            <TableRow>
-              <TableCell className="p-3">
-                <Badge variant="secondary">Subtarefa</Badge>
-              </TableCell>
-              <TableCell>Danilo Sousa</TableCell>
-              <TableCell>danilo@example.com</TableCell>
-              <TableCell>Developer</TableCell>
-              <TableCell>Developer</TableCell>
-              <TableCell>
-                <Link to={routes.issue}>Detalhes</Link>
-              </TableCell>
-            </TableRow>
-
-            <TableRow>
-              <TableCell className="p-3">
-                <Badge variant="destructive">Bug</Badge>
-              </TableCell>
-              <TableCell>Zahra Ambessa</TableCell>
-              <TableCell>zahra@example.com</TableCell>
-              <TableCell>Admin</TableCell>
-              <TableCell>Admin</TableCell>
-            </TableRow>
-
-            <TableRow>
-              <TableCell className="p-3">
-                <Badge variant="destructive">Bug</Badge>
-              </TableCell>
-              <TableCell>Jasper Eriksson</TableCell>
-              <TableCell>jasper@example.com</TableCell>
-              <TableCell>Developer</TableCell>
-              <TableCell>Developer</TableCell>
-            </TableRow>
+            {issues.map &&
+              issues.map((issue: Issue) => (
+                <TableRow>
+                  <TableCell className="p-3">
+                    <Badge
+                      variant={
+                        issue.issue_type === "Bug" ? "destructive" : "secondary"
+                      }
+                    >
+                      {issue.issue_type}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Link
+                      className="text-primary font-bold text-nowrap "
+                      to={issue.jira_url}
+                      target="_blank"
+                    >
+                      <span className="flex items-center ">
+                        {issue.issue_key}
+                        <ExternalLinkIcon className="w-4 h-4 ml-2" />
+                      </span>
+                    </Link>
+                  </TableCell>
+                  <TableCell>{issue.issue_priority}</TableCell>
+                  <TableCell>{issue.total_returns}</TableCell>
+                  <TableCell>
+                    <p className="">{issue.issue_summary}</p>
+                  </TableCell>
+                  <TableCell>
+                    <Link to={routes.issue}>
+                      <Button variant="link">Editar</Button>
+                    </Link>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </div>

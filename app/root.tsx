@@ -9,7 +9,6 @@ import {
 } from "@remix-run/react";
 
 import styles from "./tailwind.css";
-import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 import designSystem from "@vert-capital/design-system-ui/dist/style.css";
 import { Footer } from "@vert-capital/design-system-ui";
@@ -38,13 +37,16 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
-        <Header />
-        <div className="flex-row bg-extraLight">
-          <Sidebar />
+      <body className="bg-extraLight">
+        <div className="w-full sticky top-0 z-50">
+          <Header />
+        </div>
+        <div>
           <Outlet />
         </div>
-        <Footer />
+        <div className="w-full fixed bottom-0">
+          <Footer />
+        </div>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
