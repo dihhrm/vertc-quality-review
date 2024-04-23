@@ -1,4 +1,4 @@
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -6,19 +6,36 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  json,
+  redirect,
+  useLoaderData,
 } from "@remix-run/react";
 
 import styles from "./tailwind.css";
 import Header from "./components/Header";
 import designSystem from "@vert-capital/design-system-ui/dist/style.css";
 import { Footer } from "@vert-capital/design-system-ui";
+import { getSession } from "./services/session.server";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: designSystem },
   { rel: "stylesheet", href: styles },
 ];
 
+export let loader: LoaderFunction = async ({ request, params }) => {
+  const session = await getSession(request.headers.get("Cookie"));
+  const token = session.get("token");
+  // const token = await authenticate(request, session);
+  // const userId = await getUserId(request);
+  if (!token)
+    // return redirect(String(process.env.PUBLIC_API_URL + "/accounts/login"));
+    // return redirect("auth/12412412/412412");
+  return json({ token });
+};
+
 export default function App() {
+  const data = useLoaderData();
+
   return (
     <html lang="en">
       <head>
